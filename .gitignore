@@ -23,4 +23,4 @@ appsettings.*
 **/*.log
 etc/*.json
 
-.nupkg/
+nupkg/
