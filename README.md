@@ -82,3 +82,8 @@ When you run `devref remote Package`, this is what happens:
 * Modify the `.csproj` file in the current working directory, changing any `<ProjectReference>` for `Package` to `<PackageReference>` (using the version registered in `.devref`).
 * Comment out the `.csproj` file's entry in `.gitignore` to allow `git` to start tracking the `.csproj` file again.
 * Execute `dotnet restore` in the current working directory.
+
+# TODO
+
+- [ ] Add automatic addition of `.devref` to `.gitignore`
+- [ ] Add `.csproj` file handling in `.gitignore`
