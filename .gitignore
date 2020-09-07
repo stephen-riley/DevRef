@@ -1,0 +1,26 @@
+# Build results
+bin/
+obj/
+
+##
+## Visual Studio Code
+##
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# macOS
+.DS_Store
+
+# keep known appsettings files, ignore the rest
+appsettings.*
+!appsettings.json
+!appsettings.Docker.json
+!appsettings.Development.json
+
+**/*.log
+etc/*.json
+
+.nupkg/
