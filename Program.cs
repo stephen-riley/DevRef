@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using CommandLine;
 
 namespace DevRef
@@ -11,9 +12,9 @@ namespace DevRef
             try
             {
                 Parser.Default.ParseArguments<ManageOptions, LocalOptions, RemoteOptions>(args)
-                    .WithParsed<ManageOptions>(options => Manage(options))
-                    .WithParsed<LocalOptions>(options => SwitchToLocal(options))
-                    .WithParsed<RemoteOptions>(options => SwitchToRemote(options));
+                    .WithParsed<ManageOptions>(options => Task.Run(async () => await Manage(options)).Wait())
+                    .WithParsed<LocalOptions>(options => Task.Run(async () => await SwitchToLocal(options)).Wait())
+                    .WithParsed<RemoteOptions>(options => Task.Run(async () => await SwitchToRemote(options)).Wait());
             }
             catch (Exception e)
             {
@@ -22,7 +23,7 @@ namespace DevRef
             }
         }
 
-        static void Manage(ManageOptions options)
+        static async Task Manage(ManageOptions options)
         {
             if (!File.Exists(options.LocalPath))
             {
@@ -37,25 +38,27 @@ namespace DevRef
 
             Utils.AddManagedEntry(entry);
 
-            // switch to local
-            Utils.ChangePackageToProject(entry.Package, entry.LocalPath);
+            Console.WriteLine($"Package {entry.Package} now registered with DevRef.");
 
-            // run dotnet restore
-            Utils.RunDotnetRestore();
+            await SwitchToLocal(new LocalOptions { Package = options.Package });
         }
 
-        static void SwitchToLocal(LocalOptions options)
+        static async Task SwitchToLocal(LocalOptions options)
         {
             var entry = Utils.GetEntryForPackage(options.Package);
             Utils.ChangePackageToProject(entry.Package, entry.LocalPath);
-            Utils.RunDotnetRestore();
+            await Utils.RunDotnetRestore();
+
+            Console.WriteLine($"Switched package {options.Package} to use local path {entry.LocalPath}.");
         }
 
-        static void SwitchToRemote(RemoteOptions options)
+        static async Task SwitchToRemote(RemoteOptions options)
         {
             var entry = Utils.GetEntryForPackage(options.Package);
             Utils.ChangeProjectToPackage(entry.LocalPath, entry.Package, entry.Version);
-            Utils.RunDotnetRestore();
+            await Utils.RunDotnetRestore();
+
+            Console.WriteLine($"Switched package {options.Package} to use remote version {entry.Version}.");
         }
     }
 }

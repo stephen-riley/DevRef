@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using CliWrap;
 using Newtonsoft.Json;
 
@@ -68,7 +68,7 @@ namespace DevRef
             File.WriteAllText(".devref", JsonConvert.SerializeObject(refFile, formatting: Formatting.Indented));
         }
 
-        public static async void RunDotnetRestore()
+        public static async Task RunDotnetRestore()
         {
             var result = await Cli.Wrap("dotnet").WithArguments("restore").ExecuteAsync();
 
