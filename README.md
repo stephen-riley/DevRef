@@ -87,9 +87,8 @@ When you run `devref remote Package`, this is what happens:
 
 After building:
 ```
-dotnet tool uninstall -g DevRef
 dotnet pack
-dotnet tool install --global --add-source ./nupkg DevRef
+dotnet tool update -g DevRef --add-source ./nupkg
 ```
 
 
