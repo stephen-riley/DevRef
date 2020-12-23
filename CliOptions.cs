@@ -3,6 +3,11 @@ using CommandLine;
 
 namespace DevRef
 {
+    [Verb("info")]
+    public class InfoOptions
+    {
+    }
+
     [Verb("manage")]
     public class ManageOptions
     {

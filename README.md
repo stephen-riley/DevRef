@@ -83,7 +83,19 @@ When you run `devref remote Package`, this is what happens:
 * Comment out the `.csproj` file's entry in `.gitignore` to allow `git` to start tracking the `.csproj` file again.
 * Execute `dotnet restore` in the current working directory.
 
+# Development
+
+After building:
+```
+dotnet tool uninstall -g DevRef
+dotnet pack
+dotnet tool install --global --add-source ./nupkg DevRef
+```
+
+
 # TODO
 
+- [X] `info` command to list current project's configuration
+- [ ] Loop over all managed packages if no package name is given
 - [ ] Add automatic addition of `.devref` to `.gitignore`
 - [ ] Add `.csproj` file handling in `.gitignore`

@@ -11,8 +11,9 @@ namespace DevRef
         {
             try
             {
-                Parser.Default.ParseArguments<ManageOptions, LocalOptions, RemoteOptions>(args)
+                Parser.Default.ParseArguments<ManageOptions, LocalOptions, RemoteOptions, InfoOptions>(args)
                     .WithParsed<ManageOptions>(options => Task.Run(async () => await Manage(options)).Wait())
+                    .WithParsed<InfoOptions>(options => ShowManagedPackages(options))
                     .WithParsed<LocalOptions>(options => Task.Run(async () => await SwitchToLocal(options)).Wait())
                     .WithParsed<RemoteOptions>(options => Task.Run(async () => await SwitchToRemote(options)).Wait());
             }
@@ -43,13 +44,18 @@ namespace DevRef
             await SwitchToLocal(new LocalOptions { Package = options.Package });
         }
 
+        static void ShowManagedPackages(InfoOptions options)
+        {
+            Utils.ShowManagedPackages();
+        }
+
         static async Task SwitchToLocal(LocalOptions options)
         {
             var entry = Utils.GetEntryForPackage(options.Package);
             Utils.ChangePackageToProject(entry.Package, entry.LocalPath);
             await Utils.RunDotnetRestore();
 
-            Console.WriteLine($"Switched package {options.Package} to use local path {entry.LocalPath}.");
+            Console.WriteLine($"Switched package \"{options.Package}\" to use local path \"{entry.LocalPath}\".");
         }
 
         static async Task SwitchToRemote(RemoteOptions options)
@@ -58,7 +64,7 @@ namespace DevRef
             Utils.ChangeProjectToPackage(entry.LocalPath, entry.Package, entry.Version);
             await Utils.RunDotnetRestore();
 
-            Console.WriteLine($"Switched package {options.Package} to use remote version {entry.Version}.");
+            Console.WriteLine($"Switched package \"{options.Package}\" to use remote version \"{entry.Version}\".");
         }
     }
 }

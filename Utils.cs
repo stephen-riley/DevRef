@@ -174,5 +174,21 @@ namespace DevRef
 
             throw new Exception($"package {package} is not under management");
         }
+
+        public static void ShowManagedPackages()
+        {
+            if (File.Exists(".devref"))
+            {
+                var refFile = JsonConvert.DeserializeObject<DevRefFile>(File.ReadAllText(".devref"));
+
+                Console.WriteLine("Packages under DevRef management");
+                Console.WriteLine("=================================");
+
+                foreach (var package in refFile.Packages.Values)
+                {
+                    Console.WriteLine($"{package.Package} ({package.Version}) <=> {package.LocalPath}");
+                }
+            }
+        }
     }
 }
