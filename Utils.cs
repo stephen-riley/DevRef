@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -188,6 +189,19 @@ namespace DevRef
                 {
                     Console.WriteLine($"{package.Package} ({package.Version}) <=> {package.LocalPath}");
                 }
+            }
+        }
+
+        public static List<string> GetAllPackagesUnderManagement()
+        {
+            if (File.Exists(".devref"))
+            {
+                var refFile = JsonConvert.DeserializeObject<DevRefFile>(File.ReadAllText(".devref"));
+                return refFile.Packages.Values.Select(p => p.Package).ToList();
+            }
+            else
+            {
+                return new List<string>();
             }
         }
     }

@@ -12,8 +12,8 @@
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/DevRef.dll",
             "args": [
-                "info",
-                // "Ovds.Dtos"
+                "remote",
+                "Ovds.Dtos"
             ],
             "cwd": "/Users/stephen/Projects/tmp/NugetTest",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console

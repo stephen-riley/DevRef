@@ -96,6 +96,6 @@ dotnet tool install --global --add-source ./nupkg DevRef
 # TODO
 
 - [X] `info` command to list current project's configuration
-- [ ] Loop over all managed packages if no package name is given
+- [X] Loop over all managed packages if no package name is given
 - [ ] Add automatic addition of `.devref` to `.gitignore`
 - [ ] Add `.csproj` file handling in `.gitignore`

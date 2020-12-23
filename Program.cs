@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using CommandLine;
@@ -51,20 +52,36 @@ namespace DevRef
 
         static async Task SwitchToLocal(LocalOptions options)
         {
-            var entry = Utils.GetEntryForPackage(options.Package);
-            Utils.ChangePackageToProject(entry.Package, entry.LocalPath);
-            await Utils.RunDotnetRestore();
+            var packagesTbd =
+                options.Package == null
+                ? Utils.GetAllPackagesUnderManagement()
+                : new List<string> { options.Package };
 
-            Console.WriteLine($"Switched package \"{options.Package}\" to use local path \"{entry.LocalPath}\".");
+            foreach (var package in packagesTbd)
+            {
+                var entry = Utils.GetEntryForPackage(package);
+                Utils.ChangePackageToProject(entry.Package, entry.LocalPath);
+                Console.WriteLine($"Switched package \"{entry.Package}\" to use local path \"{entry.LocalPath}\".");
+            }
+
+            await Utils.RunDotnetRestore();
         }
 
         static async Task SwitchToRemote(RemoteOptions options)
         {
-            var entry = Utils.GetEntryForPackage(options.Package);
-            Utils.ChangeProjectToPackage(entry.LocalPath, entry.Package, entry.Version);
-            await Utils.RunDotnetRestore();
+            var packagesTbd =
+                options.Package == null
+                ? Utils.GetAllPackagesUnderManagement()
+                : new List<string> { options.Package };
 
-            Console.WriteLine($"Switched package \"{options.Package}\" to use remote version \"{entry.Version}\".");
+            foreach (var package in packagesTbd)
+            {
+                var entry = Utils.GetEntryForPackage(package);
+                Utils.ChangeProjectToPackage(entry.LocalPath, entry.Package, entry.Version);
+                Console.WriteLine($"Switched package \"{entry.Package}\" to use remote version \"{entry.Version}\".");
+            }
+
+            await Utils.RunDotnetRestore();
         }
     }
 }
